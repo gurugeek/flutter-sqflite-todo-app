@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:todo_sqflite_flutter/model/todo_item.dart';
 import 'package:todo_sqflite_flutter/util/database_client.dart';
 import 'package:todo_sqflite_flutter/util/date_formatter.dart';
-import 'package:diamond_fab/diamond_fab.dart';
 
 class TodoScreen extends StatefulWidget {
   @override
@@ -53,6 +52,7 @@ class _TodoScreenState extends State<TodoScreen> {
                     child: ListTile(
                       title: _itemList[index],
                       onLongPress: () => _updateItem(_itemList[index], index),
+                      onTap: () => _showDetail(_itemList[index], index),
                       trailing: Listener(
                         key: Key(_itemList[index].itemName),
                         child: Icon(
@@ -72,10 +72,8 @@ class _TodoScreenState extends State<TodoScreen> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: DiamondFab(
-        backgroundcolor: Colors.blueGrey,
+      floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.white,
-        notchMargin: 6.0,
         elevation: 10.0,
         highlightElevation: 10.0,
         child: new ListTile(
@@ -86,7 +84,9 @@ class _TodoScreenState extends State<TodoScreen> {
       bottomNavigationBar: BottomAppBar(
         elevation: 6.0,
         color: Colors.lightBlue,
-        hasNotch: true,
+        //update 2019
+        notchMargin: 2.0,
+        shape: CircularNotchedRectangle(),
         child: new Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,7 +96,9 @@ class _TodoScreenState extends State<TodoScreen> {
             // )
             IconButton(
               icon: Icon(Icons.lightbulb_outline),
-              onPressed: (){_showTip();},
+              onPressed: () {
+                _showTip();
+              },
               color: Colors.white,
             ),
             IconButton(
@@ -205,6 +207,24 @@ class _TodoScreenState extends State<TodoScreen> {
         });
   }
 
+  _showDetail(TodoItem itemList, int index) {
+    var alert = new AlertDialog(
+      title: Text("Detail"),
+      content: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(itemList.itemName),
+          )
+        ],
+      ),
+    );
+    showDialog(
+        context: context,
+        builder: (_) {
+          return alert;
+        });
+  }
+
   void _handleSubmittedUpdate(int index, TodoItem item) {
     setState(() {
       _itemList.removeWhere((element) {
@@ -219,8 +239,9 @@ class _TodoScreenState extends State<TodoScreen> {
       content: Row(
         children: <Widget>[
           Expanded(
-            child: Text("Long press to update your Todo :-)"),
-          )         
+            child:
+                Text("Press to see Todo detail\n\nLong press to update Todo"),
+          )
         ],
       ),
     );

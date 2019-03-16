@@ -44,6 +44,7 @@ class TodoItem extends StatelessWidget {
         children: <Widget>[
           //solve the overflow problem
           Expanded(
+            
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -65,7 +66,7 @@ class TodoItem extends StatelessWidget {
                         fontSize: 12.0,
                         fontStyle: FontStyle.italic),
                   ),
-                )
+                ),
               ],
             ),
           )
